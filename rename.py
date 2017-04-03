@@ -4,13 +4,11 @@ import csv
 # Constants
 DICT = 'dict.txt'
 
-#make sure that the dict file has unix encoding, not mac encoding which excel likes to do sometimes
-
 def file_to_dict(tsv):
     name_dict = {}
 
     with open(tsv, 'rb') as tsvin:
-        tsvin = csv.reader(tsvin, delimiter='\t')
+        tsvin = csv.reader(tsvin, delimiter='\t', dialect=csv.excel_tab)
         for row in tsvin:
             name_dict.update(dict([tuple(row[0].split())]))
 
