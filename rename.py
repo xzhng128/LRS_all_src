@@ -4,6 +4,8 @@ import csv
 # Constants
 DICT = 'dict.txt'
 
+#make sure that the dict file has unix encoding, not mac encoding which excel likes to do sometimes
+
 def file_to_dict(tsv):
     name_dict = {}
 
