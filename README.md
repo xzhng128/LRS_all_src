@@ -11,6 +11,6 @@ renamefiles_py.py remane files in a directory based on a dictionary file
 
 
 hwe filter only needs to be run if chr 2, 3, and 8 are included, not necessary for ZmCCT.
-hew.rmd is a dependent file for the hwe filter
+hwe.rmd is a dependent file for the hwe filter
 
 downstream analysis has code for figures in plos one 2017 paper
