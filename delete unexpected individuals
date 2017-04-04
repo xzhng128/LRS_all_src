@@ -1,0 +1,20 @@
+###### commend line in unix  #####
+
+# filter with vcftools --chr
+vcftools sortedtassel_renamed.vcf --chr 10 --recode --out landrace_10.vcf
+
+# extract the line including all individual names (It also includes the first 9 items, such as chr, pos,..)
+awk 'NR~/^(11)$/{print}' landrace_10.vcf.recode.vcf >line_name.txt
+
+# transpose columnw and rows
+tr -s '\t' '\n' <line_name.txt> new_line_name.txt
+
+#delete the first nine lines, which are not the name of individuals
+sed -i 1,9d new_line_name.txt
+
+# select lines needed to be deleted
+grep -e 'Xpress_*' > Xpress.txt
+
+# remove unwanted individuals from vcf file, ended up with landrace_10_nopre.recode.vcf
+vcftools --vcf landrace_10.vcf.recode.vcf --remove Xpress.txt --recode --out landrace_10_nopre
+
