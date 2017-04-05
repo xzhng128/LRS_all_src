@@ -18,3 +18,25 @@ grep -e 'Xpress_*' > Xpress.txt
 # remove unwanted individuals from vcf file, ended up with landrace_10_nopre.recode.vcf
 vcftools --vcf landrace_10.vcf.recode.vcf --remove Xpress.txt --recode --out landrace_10_nopre
 
+
+
+####change to R to further delete unexpected sites and individuals with high missing data####
+
+# open files with site name and individuals only, change N to NA
+all10<-read.delim("all10.hmp.txt",sep='',header = T)
+all10<-all10[,c(1,12:ncol(all10))]
+all10[all10 == "N"]<-NA
+
+# calculating missing data ratio for each sites and delete sites with missing data higher than 60%
+missing_row_ratio <-apply(is.na(all10),1,sum)
+new_data<-all10[missing_row_ratio<1509*0.6,]
+
+# make the list of unwated sites.
+d<-setdiff(all10[,1],new_data[,1])
+write.csv(d,"site_delete.csv")
+
+# list unwated individuals
+c<-apply(is.na(new_data),2,sum)
+idx <-which(c>nrow(new_data/2))
+write.csv(names(idx),"indv_delete.csv")
+
