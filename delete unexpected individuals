@@ -31,6 +31,9 @@ all10[all10 == "N"]<-NA
 missing_row_ratio <-apply(is.na(all10),1,sum)
 new_data<-all10[missing_row_ratio<1509*0.6,]
 
+# check the chr information of site
+all10[all10[,1]%in%d,3]
+
 # make the list of unwated sites.
 d<-setdiff(all10[,1],new_data[,1])
 write.csv(d,"site_delete.csv")
