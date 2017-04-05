@@ -1,0 +1,66 @@
+---
+title: "PCA and MDS"
+author: "TMJ"
+date: "Monday, April 13, 2015"
+output: html_document
+---
+
+Import data files
+
+```{r, echo=FALSE}
+mds.3k <- read.table("C:/Users/tmjamann/Google Drive/LRS/results/2015-04-13/plink.3k.mds", header=TRUE, quote="\"")
+mds.30k <- read.table("C:/Users/tmjamann/Google Drive/LRS/results/2015-04-13/plink.30k.mds", header=TRUE, quote="\"")
+eigenvec.3k <- read.table("C:/Users/tmjamann/Google Drive/LRS/results/2015-04-13/plink.eigenvec.3k", quote="\"")
+eigenvec.30k <- read.table("C:/Users/tmjamann/Google Drive/LRS/results/2015-04-13/plink.eigenvec.30k", quote="\"")
+passport <- read.csv("C:/Users/tmjamann/Google Drive/LRS/results/2015-04-13/passport.csv")
+
+```
+join files
+
+```{r, echo=FALSE}
+mds.3k.passport <- merge(passport, mds.3k, by="FID")
+mds.30k.passport <- merge(passport, mds.30k, by="FID")
+eigenvec.3k.passport <- merge(passport, eigenvec.3k, by.x="FID", by.y="V1")
+eigenvec.30k.passport <- merge(passport, eigenvec.30k, by.x="FID", by.y="V1")
+```
+
+First, let's look at principle components:
+
+```{r, echo=FALSE}
+library(ggplot2)
+peigenvec3krace <- ggplot(eigenvec.3k.passport, aes(V3, V4)) + geom_point(aes(colour = race))
+peigenvec3krace  + ggtitle("eigenvec.3k by race")
+peigenvec30krace <- ggplot(eigenvec.30k.passport, aes(V3, V4)) + geom_point(aes(colour = race))
+peigenvec30krace + ggtitle("eigenvec.30k by race")
+peigenvec3kcountry <- ggplot(eigenvec.3k.passport, aes(V3, V4)) + geom_point(aes(colour = country))
+peigenvec3kcountry  + ggtitle("eigenvec.3k by country")
+peigenvec30kcountry <- ggplot(eigenvec.30k.passport, aes(V3, V4)) + geom_point(aes(colour = country))
+peigenvec30kcountry + ggtitle("eigenvec.30k by country")
+```
+
+Then, MDS:
+
+```{r, echo=FALSE}
+library(ggplot2)
+pmds3krace <- ggplot(mds.3k.passport, aes(C1, C2)) + geom_point(aes(colour = race))
+pmds3krace  + ggtitle("mds.3k by race")
+pmds30krace <- ggplot(mds.30k.passport, aes(C1, C2)) + geom_point(aes(colour = race))
+pmds30krace + ggtitle("mds.30k by race")
+pmds3kcountry <- ggplot(mds.3k.passport, aes(C1, C2)) + geom_point(aes(colour = country))
+pmds3kcountry  + ggtitle("mds.3k  by country")
+pmds30kcountry <- ggplot(mds.30k.passport, aes(C1, C2)) + geom_point(aes(colour = country))
+pmds30kcountry + ggtitle("mds.30k  by country")
+
+#l <- ggplot(e, aes(C1, C2)) + geom_point(aes(colour = LG)) + scale_colour_gradient2(mid=("green"), low="black", high="purple")
+#a <- ggplot(e, aes(C1, C2)) + geom_point(aes(colour = ALT)) + scale_colour_gradient2(mid=("orange"), high="blue")
+#lg <- ggplot(e, aes(C1, C2)) + geom_point(aes(colour = LGG)) + scale_colour_gradient2()
+#s <- ggplot(e, aes(C1, C2)) + geom_point(aes(colour = SILK)) + scale_colour_gradient2()
+```
+
+
+this can be improved to look for correlation between PC and variables
+```{r}
+library("corrgram")
+corrgram(eigenvec.3k.passport, upper.panel=panel.pts)
+```
+
